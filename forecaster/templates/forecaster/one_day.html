@@ -1,0 +1,104 @@
+{% extends "forecaster/base/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block css_imports %}
+    <link rel="stylesheet"
+          href="{% static "libs/jquery/jquery.datetimepicker.min.css" %}">
+{% endblock %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "forecaster:dashboard" %}">Panel meteorologa</a>
+        </li>
+        <li class="breadcrumb-item"><a href="{% url 'forecaster:client_details' client.pk %}">{{ client }}</a>
+        </li>
+        <li class="breadcrumb-item active">Prognoza jednodniowa dla miasta <b>{{ view.kwargs.location }}</b>
+        </li>
+    </ol>
+    <hr>
+    <div class="row">
+        <div class="col-12">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="col-12 col-centered">
+                    {{ form | crispy }}
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-4">
+                        {{ wf1_form | crispy }}
+                    </div>
+                    <div class="col-4">
+                        {{ wf2_form | crispy }}
+                    </div>
+                    <div class="col-4">
+                        <a href="javascript:ajaxCall()" class="btn btn-info">Pobierz dane z api</a>
+                        <div id="test" class="test-data">
+                        </div>
+                    </div>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Submit"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_imports %}
+    <script src="{% static "libs/jquery/jquery.datetimepicker.full.min.js" %}"></script>
+    <script src="{% static "forecaster/js/forecaster.js" %}"></script>
+    <script type="text/javascript">
+
+        function windDirectionFromDegrees(bearing) {
+            var directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+
+            val = parseInt((bearing / 45) + .5);
+            return directions[(val % 8)];
+        }
+
+        function jsonToForm(wf_number, json) {
+            $("#id_wf" + wf_number + "-description").val(
+                "Typ opadu: " + json['precip_type'] + "\n" +
+                "Podsumowanie: " + json['summary'] + "\n" +
+                "Ozon: " + json['ozone'] + "\n" +
+                "Prawdopodobienstwo opadow: " + (json['precip_probability'] * 100) + "%\n" +
+                "index uv: " + json['uv_index'] + "\n" +
+                "widocznosc: " + json['visibility']
+            );
+            $("#id_wf" + wf_number + "-clouds").val(json['cloud_cover']);
+            $("#id_wf" + wf_number + "-rainfall").val(json['precip_intensity']);
+            $("#id_wf" + wf_number + "-air_temp").val(json['temperature']);
+            $("#id_wf" + wf_number + "-dewpoint_temp").val(json['dev_point']);
+            $("#id_wf" + wf_number + "-pressure").val(json['pressure']);
+            $("#id_wf" + wf_number + "-humidity").val(json['humidity']);
+            $("#id_wf" + wf_number + "-wind_speed").val(json['wind_speed']);
+            $("#id_wf" + wf_number + "-wind_gusts").val(json['wind_gust']);
+            $("#id_wf" + wf_number + "-wind_direction").val(windDirectionFromDegrees(json['wind_bearing']));
+        }
+
+        function ajaxCall() {
+            $.ajax({
+                url: "{% url 'forecaster:one_day_forecast_ajax' %}",
+                type: "POST",
+                async: true,
+                dataType: "json",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    begin_date_wf1: $("#id_wf1-begin_date").val(),
+                    begin_date_wf2: $("#id_wf2-begin_date").val(),
+                    latitude: "{{ view.kwargs.latitude }}",
+                    longitude: "{{ view.kwargs.longitude}}",
+                },
+                success: function (json) {
+                    jsonToForm(1, JSON.parse(json['wf1']));
+                    jsonToForm(2, JSON.parse(json['wf2']));
+                },
+                fail: function (xhr, textStatus, errorThrown) {
+                    alert('Wystapil nieoczekiwany blad')
+                }
+            })
+        }
+    </script>
+{% endblock %}

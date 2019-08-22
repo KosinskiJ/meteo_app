@@ -1,0 +1,67 @@
+<div>
+    {% if wf.description %}
+
+        <div class="alert alert-success">
+            <h4>Opis</h4>
+            {{ wf.description }}
+        </div>
+    {% endif %}
+
+    {% if wf.synoptic_warning.count != 0 %}
+        <div class="alert alert-danger">
+            <h4 class="fas fa-exclamation-triangle"> Ostrzeżenia pogodowe</h4>
+            {% for synoptic_warning in wf.synoptic_warning.all %}
+                <hr>
+                <b>Czas obowiązywania: </b>{{ synoptic_warning.begin_date|date:"d-m-Y, H:i" }} -
+                {{ synoptic_warning.finish_date|date:"d-m-Y H:i" }}
+                <br>
+                <b>Opis: </b>{{ synoptic_warning.description }}<br>
+                <b>Rodzaj: </b>{{ synoptic_warning.synoptic_warning_criteria.criteria }}<br>
+                <b>Poziom zagrożenia: </b>{{ synoptic_warning.synoptic_warning_criteria.get_danger_level_display }}<br>
+
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <table class="table table-bordered text-center">
+        <thead>
+        <tr>
+            <th>Data ważności prognozy</th>
+            <th>Pora dnia</th>
+            <th>Zachmurzenie</th>
+            <th>Opad deszczu</th>
+            <th>Opad śniegu</th>
+            <th>Temperatura powietrza</th>
+            <th>Temperatura punktu rosy</th>
+            <th>Ciśnienie atmosferyczne</th>
+            <th>Wilgotność</th>
+            <th>Prędkość wiatru</th>
+            <th>Kierunek wiatru</th>
+            <th>Porywy wiatru</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ wf.begin_date|date:"d-m-Y H:i" }}<br> - <br>
+                {{ wf.finish_date|date:"d-m-Y H:i" }}</td>
+            <td>{{ wf.day_night }}</td>
+            <td>{{ wf.clouds }}</td>
+            <td>{{ wf.rainfall }}</td>
+            <td>{{ wf.snowfall }}</td>
+            <td>{{ wf.air_temp }}</td>
+            <td>{{ wf.dewpoint_temp }}</td>
+            <td>{{ wf.pressure }}</td>
+            <td>{{ wf.humidity }}</td>
+            <td>{{ wf.wind_speed }}</td>
+            <td>{{ wf.wind_direction }}</td>
+            <td>{{ wf.wind_gusts }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    {% if wf.sar_image %}
+        {{ wf.sar }}
+    {% endif %}
+
+    <hr>
+</div>

@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profesjonalne prognozy pogody</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,700">
+    <link rel="stylesheet" href="{% static "dashboard/static/css/styles-merged.css" %}">
+    <script src="https://unpkg.com/leaflet@0.7.7/dist/leaflet.js"></script>
+    <script src="https://api4.windy.com/assets/libBoot.js"></script>
+    <style>
+        #windy {
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+    <!--[if lt IE 9]>
+      <script src="{% static "dashboard/static/js/vendor/html5shiv.min.js" %}"></script>
+      <script src="{% static "dashboard/static/js/vendor/respond.min.js" %}"></script>
+    <![endif]-->
+</head>
+<body>
+
+
+<nav class="navbar probootstrap-megamenu navbar-default probootstrap-navbar">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url "dashboard:index" %}" title="uiCookies:A">
+           </a>
+        </div>
+
+        <div id="navbar-collapse" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url "dashboard:index" %}">Strona główna</a></li>
+                <li class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Prognozy</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="about.html">O firmie</a></li>
+                        <li><a href="team.html">Zespół</a></li>
+                        <li class="dropdown-submenu dropdown">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span>Oferta</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Second Level Menu</a></li>
+                                <li><a href="#">Second Level Menu</a></li>
+                                <li><a href="#">Second Level Menu</a></li>
+                                <li><a href="#">Second Level Menu</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="pricing.html">Ceny</a></li>
+                    </ul>
+                </li>
+                <li><a href="{% url "dashboard:contact" %}">Kontakt</a></li>
+                <li class="probootstra-cta-button"><a href="#" class="btn" data-toggle="modal"
+                                                      data-target="#loginModal">Wycena</a></li>
+                <li><a href="{% url "dashboard:login" %}">Login</a></li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<section class="probootstrap-hero">
+    <div class="container">
+        <div class="row">
+            <div id="windy"></div>
+        </div>
+    </div>
+</section>
+
+<section class="probootstrap-section probootstrap-bg-white probootstrap-zindex-above-showcase">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 text-center section-heading probootstrap-animate"
+                 data-animate-effect="fadeIn">
+                <h2>Platform Features</h2>
+                <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore
+                    natus quos quibusdam soluta at.</p>
+            </div>
+        </div>
+        <!-- END row -->
+        <div class="row probootstrap-gutter60">
+            <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInLeft">
+                <div class="service text-center">
+                    <div class="icon"><i class="icon-mobile3"></i></div>
+                    <div class="text">
+                        <h3>Responsive Design</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore natus
+                            quos quibusdam soluta at.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeIn">
+                <div class="service text-center">
+                    <div class="icon"><i class="icon-presentation"></i></div>
+                    <div class="text">
+                        <h3>Business Solutions</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore natus
+                            quos quibusdam soluta at.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
+                <div class="service text-center">
+                    <div class="icon"><i class="icon-circle-compass"></i></div>
+                    <div class="text">
+                        <h3>Brand Identity</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore natus
+                            quos quibusdam soluta at.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInLeft">
+                <div class="service text-center">
+                    <div class="icon"><i class="icon-lightbulb"></i></div>
+                    <div class="text">
+                        <h3>Creative Ideas</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore natus
+                            quos quibusdam soluta at.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 probootstrap-animate">
+                <div class="service text-center">
+                    <div class="icon"><i class="icon-magnifying-glass2"></i></div>
+                    <div class="text">
+                        <h3>Search Engine Friendly</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore natus
+                            quos quibusdam soluta at.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 probootstrap-animate" data-animate-effect="fadeInRight">
+                <div class="service text-center">
+                    <div class="icon"><i class="icon-browser2"></i></div>
+                    <div class="text">
+                        <h3>Easy Customization</h3>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto provident qui tempore natus
+                            quos quibusdam soluta at.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="{% static "dashboard/static/js/scripts.min.js" %}"></script>
+<script src="{% static "dashboard/static/js/custom.min.js" %}"></script>
+
+<script>
+
+    const options = {
+        key: 'Eh2QD24wt1m1eFBjZfKGBWiVq3r2KN4k',
+
+        lat: 52,
+        lon: 21,
+        zoom: 5,
+
+        timestamp: Date.now() + 3 * 24 * 60 * 60 * 1000,
+        hourFormat: '12h',
+
+    }
+
+    windyInit(options, windyAPI => {
+
+        const {picker, utils, broadcast} = windyAPI
+
+        picker.on('pickerOpened', latLon => {
+            // picker has been opened at latLon coords
+
+            let {lat, lon, values, overlay} = picker.getParams()
+            // -> 50.4, 14.3, 'wind', [ U,V, ]
+
+            let windObject = utils.wind2obj(values)
+
+            console.log(windObject)
+
+        })
+
+        picker.on('pickerMoved', latLon => {
+            // picker was dragged by user to latLon coords
+        })
+
+        picker.on('pickerClosed', () => {
+            // picker was closed
+        })
+
+        // Wait since wather is rendered
+        broadcast.once('redrawFinished', () => {
+
+            picker.open({lat: 48.4, lon: 14.3})
+            // Opening of a picker (async)
+
+        })
+
+    })
+</script>
+</body>
+</html>

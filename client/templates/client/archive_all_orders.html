@@ -1,0 +1,23 @@
+{% extends "client/base/base.html" %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "client:dashboard" %}">Panel klienta</a>
+        </li>
+        <li class="breadcrumb-item active">Archiwum</li>
+    </ol>
+    <hr>
+
+    {% for order in orders %}
+        <p class="alert alert-info">
+            Zabezpieczenie meteorologiczne dla miasta <b>{{ order.city }}</b>, rodzaj prognozy:
+            <b>{{ order.get_forecast_type_choice_display }}</b>,
+            data wygaśnięcia: <b>{{ order.expire_date|date:"d-m-Y" }}</b>
+            <a href="{% url "client:archive" pk=order.pk %}" class="btn btn-info btn-lg fa fa-archive">
+                Prognozy historyczne</a>
+        </p>
+    {% endfor %}
+
+
+{% endblock %}

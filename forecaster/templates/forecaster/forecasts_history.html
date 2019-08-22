@@ -1,0 +1,94 @@
+{% extends "forecaster/base/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "forecaster:dashboard" %}">Panel meteorologa</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="{% url 'forecaster:client_details' client.pk %}">{{ client }}</a>
+        </li>
+        <li class="breadcrumb-item active">Prognoza jednodniowa</li>
+    </ol>
+    <hr>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Numer prognozy</th>
+                    <th>Wykonawca</th>
+                    <th>Data utworzenia</th>
+                    <th>Zmodyfikowal</th>
+                    <th>Data ostatniej modyfiakacji</th>
+                    <th>Status</th>
+                    <th>Termin prognozy (od- do)</th>
+                    <th>Edytuj</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr class="table-primary">
+                        <td colspan="8">{{ order }}</td>
+                    </tr>
+                    {% for forecast in order.forecasttype_set.all reversed %}
+                        <tr>
+                            <td>{{ forecast.count }} / {{ order.forecast_days }}</td>
+                            <td>{{ forecast.created_by }}</td>
+                            <td>{{ forecast.creation_date }}</td>
+                            {% if forecast.modified_by == None %}
+                                <td>-</td>
+                                <td>-</td>
+                            {% else %}
+                                <td>{{ forecast.modified_by }}</td>
+                                <td>{{ forecast.modification_date }}</td>
+                            {% endif %}
+
+                            <td>{{ forecast.get_status_display }}</td>
+                            {% if order.forecast_type_choice == '24' %}
+                                <td>
+                                    {{ forecast.weather_forecast1.begin_date|date:"Y-m-d" }}<br>
+                                    {{ forecast.weather_forecast2.finish_date|date:"Y-m-d" }}
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary fas fa-edit"
+                                       href="{% url 'forecaster:one_day_edit' client_pk=client.pk one_day_pk=forecast.pk %}"></a>
+                                </td>
+                            {% elif order.forecast_type_choice == '48' %}
+                                <td>
+                                    {{ forecast.weather_forecast1.begin_date|date:"Y-m-d" }}<br>
+                                    {{ forecast.weather_forecast4.finish_date|date:"Y-m-d" }}
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary fas fa-edit"
+                                       href="{% url 'forecaster:two_day_edit' client_pk=client.pk two_day_pk=forecast.pk %}"></a>
+                                </td>
+                            {% else %}
+                                BLAD.SKONTAKTUJ SIE Z ADMINISTRATOREM (Nie sprecyzowano typu prognozy)
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js_imports %}
+    <script src="{% static "libs/jquery/jquery.datetimepicker.full.min.js" %}"></script>
+
+    <script>
+        $.datetimepicker.setLocale('pl');
+        jQuery("#id_begin_date").datetimepicker({
+            format: 'Y-m-d H:i',
+            step: 10,
+        });
+        jQuery("#id_finish_date").datetimepicker({
+            format: 'Y-m-d H:i',
+            step: 10,
+        });
+    </script>
+{% endblock %}

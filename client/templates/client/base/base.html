@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}Panel klienta{% endblock %}</title>
+
+    <link href="{% static "libs/bootstrap/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "libs/fonts-awesome/fontsawesome.min.css" %}" rel="stylesheet" type="text/css">
+
+    <link href="{% static "libs/sb-admin/sb-admin.css" %}" rel="stylesheet">
+
+    {% block css_imports %}{% endblock %}
+</head>
+
+<body id="page-top">
+{% include "client/base/navbar.html" %}
+<div id="wrapper">
+    {% include "client/base/sidebar.html" %}
+
+    <div id="content-wrapper">
+        <div class="container-fluid">
+            {% block content %}Panel klienta{% endblock %}
+
+        </div>
+    </div>
+    {% include "client/base/footer.html" %}
+
+</div>
+<script src="{% static "libs/bootstrap/bootstrap.js" %}"></script>
+<script src="{% static "libs/bootstrap/bootstrap.bundle.js" %}"></script>
+<script src="{% static "libs/jquery/jquery-3.3.1.min.js" %}"></script>
+<script src="{% static "libs/sb-admin/sb-admin.min.js" %}"></script>
+{% block js_imports %}{% endblock %}
+
+</body>
+</html>

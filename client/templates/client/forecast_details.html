@@ -1,0 +1,26 @@
+{% extends "client/base/base.html" %}
+{% block content %}
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "client:dashboard" %}">Panel klienta</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a href="{% url "client:latest_forecasts" %}">Najnowsze prognozy</a>
+        </li>
+        <li class="breadcrumb-item active">
+            Prognoza {{ forecast.forecast_type_order.get_forecast_type_choice_display }}</li>
+    </ol>
+    <hr>
+    <p class="alert alert-info">
+        Prognoza dla miasta: <b>{{ forecast.forecast_type_order.city }}</b>
+    </p>
+
+    {% include "client/_forecast_table_12h.html" with wf=forecast.weather_forecast1 %}
+    {% include "client/_forecast_table_12h.html" with wf=forecast.weather_forecast2 %}
+
+    {% if forecast.weather_forecast3 %}
+        {% include "client/_forecast_table_12h.html" with wf=forecast.weather_forecast3 %}
+        {% include "client/_forecast_table_12h.html" with wf=forecast.weather_forecast4 %}
+    {% endif %}
+{% endblock content %}

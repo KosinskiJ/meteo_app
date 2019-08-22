@@ -1,0 +1,39 @@
+{% extends "client/base/base.html" %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "client:dashboard" %}">Panel klienta</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url "client:latest_forecasts" %}">Najnowsze prognozy</a>
+        </li>
+        <li class="breadcrumb-item active">Prognozy historyczne</li>
+    </ol>
+    <hr>
+    <table class="table table-striped text-center">
+        <thead>
+        <tr>
+            <th>Numer prognozy</th>
+            <th>Data wykonania</th>
+            <th>Opcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for forecast in forecasts %}
+            <tr>
+                <td>{{ forecast.count }}</td>
+                <td>{{ forecast.creation_date|date:"d-m-Y" }}</td>
+                <td><a href="{% url "client:forecast_details" pk=forecast.pk %}" class="btn btn-info fa fa-sign"></a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}

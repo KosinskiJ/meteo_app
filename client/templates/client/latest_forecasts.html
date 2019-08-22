@@ -1,0 +1,57 @@
+{% extends "client/base/base.html" %}
+{% load client_tags %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "client:dashboard" %}">Panel klienta</a>
+        </li>
+        <li class="breadcrumb-item active">Najnowsze prognozy</li>
+    </ol>
+    <hr>
+
+    {% for order in orders %}
+        <p class="alert alert-info">
+            Prognoza dla miasta <b>{{ order.city }}</b>, rodzaj prognozy:
+            <b>{{ order.get_forecast_type_choice_display }}</b>,
+            data wygaśnięcia: <b>{{ order.expire_date|date:"d-m-Y" }}</b>
+            <a href="{% url "client:archive" pk=order.pk %}" class="btn btn-info btn-lg fa fa-archive">
+                Prognozy historyczne</a>
+        </p>
+
+        <table id="dtBasicExample" class="table table-bordered text-center">
+            <thead>
+            <tr>
+                <th>Numer prognozy</th>
+                <th>Data rozpoczęcia</th>
+                <th>Data zakończenia</th>
+                <th>Podgląd</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for forecast in order.forecasttype_set.all reversed %}
+                {% if forecast.status == "A" %}
+                    <tr>
+                        <td>{{ forecast.count }}/{{ order.forecast_days }}</td>
+                        <td>{{ forecast.weather_forecast1.begin_date | date:"d-m-Y H:i" }}</td>
+                        {% if forecast.get_type_string == "OneDayForecast" %}
+                            <td>{{ forecast.weather_forecast2.finish_date | date:"d-m-Y H:i" }}</td>
+                        {% elif forecast.get_type_string == "TwoDayForecast" %}
+                            <td>{{ forecast.weather_forecast4.finish_date | date:"d-m-Y H:i" }}</td>
+                        {% endif %}
+                        <td>
+                            <a class="btn btn-info btn-lg fas fa-info-circle fa-lg"
+                               href="{% url "client:forecast_details" pk=forecast.pk %}"></a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <br>
+    {% endfor %}
+{% endblock %}
+{% block js_imports %}
+{% endblock %}

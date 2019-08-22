@@ -1,0 +1,49 @@
+{% extends "dashboard/base/base.html" %}
+{% load static %}
+{% load dashboard_tags %}
+
+{% block css_imports %}
+    <link rel="stylesheet" type="text/css" href="{% static "dashboard/static/css/style.css" %}">
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Logowanie</h5>
+                    <form class="form-signin" method="post" action="">
+                        {% csrf_token %}
+                        <div class="form-label-group">
+                            {{ form.username | addattrs:"{'class':'form-control'}" }}
+                            <label for="inputEmail">Nazwa użytkownika</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            {{ form.password | addattrs:"{'class':'form-control'}" }}
+                            <label for="inputPassword">Hasło</label>
+                        </div>
+
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Zaloguj się
+                        </button>
+
+                        {% if form.errors %}
+                            <div class="alert alert-danger my-4">
+                                <p>Nazwa użytkownika lub hasło niepoprawne</p>
+                            </div>
+                            <hr class="my-4">
+                        {% endif %}
+                        <div class="custom-control mb-3">
+                            <a class="" href="{% url 'dashboard:password_reset' %}">
+                                Odzyskaj hasło
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

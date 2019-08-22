@@ -1,0 +1,41 @@
+{% extends "client/base/base.html" %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "client:dashboard" %}">Panel klienta</a>
+        </li>
+        <li class="breadcrumb-item active">Strona główna</li>
+    </ol>
+    <hr>
+    {% if synoptic_situation is not None %}
+        <div class="alert alert-info">
+            <h5 class="text-center">Sytuacja synoptyczna ważna w terminie
+                <b>{{ synoptic_situation.begin_date|date:"d-m-Y H:m" }}
+                    - {{ synoptic_situation.finish_date|date:"d-m-Y H:m" }}</b></h5>
+            <p>
+                <hr>
+                {{ synoptic_situation.description }}
+            </p>
+        </div>
+        <hr>
+    {% endif %}
+    <div class="row justify-content-md-center">
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="card-body-icon">
+                        <i class="fas fa-fw fa-briefcase"></i>
+                    </div>
+                    <div class="text-lg-center display-4">Moje prognozy</div>
+                </div>
+                <a id="hover_link" class="card-footer text-white"
+                   href="{% url "client:latest_forecasts" %}">
+                    <span class="float-left">Pokaż</span>
+                    <span class="float-right">
+                                        <i class="fas fa-angle-right"></i>
+                                    </span>
+                </a>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "forecaster/base/base.html" %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "forecaster:dashboard" %}">Panel meteorologa</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url "forecaster:client_details" client_pk=client.pk %}">{{ client }}</a>
+        </li>
+        <li class="breadcrumb-item active">Harmonogram prognoz</li>
+    </ol>
+    <hr>
+
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Data prognozy</th>
+                    <th>Dodaj prognoze</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for client_order in client_orders %}
+                    {% with wf_count=client_order.forecasttype_set.last.count %}
+
+                        <tr class="table-primary">
+                            <td colspan="3">{{ client_order }}
+                                <hr>
+                                <b>Nastepny numer prognozy to:
+                                    <h4>{{ wf_count | add:"1" }}</h4></b>
+                            </td>
+                        </tr>
+                        {% if client_order.forecast_type_choice == '24' %}
+                            {% for date in 24h_dates %}
+                                <tr>
+                                    <td>Prognoza na dzień: {{ date.0 }} - {{ date.1 }}</td>
+                                    <td>
+                                        <a class="btn btn-primary far fa-plus-square"
+                                           href="{% url "forecaster:one_day" client_pk=client.pk order_pk=client_order.pk wf_count=wf_count|add:"1" location=client_order.city latitude=client_order.city.latitude longitude=client_order.city.longitude begin_date=date.0 %}">
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if client_order.forecast_type_choice == '48' %}
+                            {% for date in 48h_dates %}
+                                <tr>
+                                    <td>Prognoza na dzień: {{ date.0 }} - {{ date.1 }}</td>
+                                    <td>
+                                        <a class="btn btn-primary far fa-plus-square"
+                                           href="{% url "forecaster:two_day" client_pk=client.pk order_pk=client_order.pk wf_count=wf_count|add:"1" location=client_order.city latitude=client_order.city.latitude longitude=client_order.city.longitude begin_date=date.0 %}">
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

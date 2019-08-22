@@ -1,0 +1,52 @@
+{% extends "forecaster/base/base.html" %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'forecaster:dashboard' %}">Panel meteorologa</a>
+        </li>
+        <li class="breadcrumb-item active">Sytuacja synoptyczna - lista</li>
+    </ol>
+    <hr>
+    <a class="btn btn-info" href="{% url 'forecaster:synoptic_situation_create' %}">Dodaj nowa</a>
+    <hr>
+    {% include "forecaster/base/_paginate.html" %}
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Data waznosci<br>(data rozpoczecia-<br>data zakonczenia)</th>
+                <th>Wykonal</th>
+                <th>Data wykonania</th>
+                <th>Modyfikowal</th>
+                <th>Data modyfikacji</th>
+                <th>Opis</th>
+                <th>Opcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for synopt in synoptic_situations %}
+                <tr>
+                    <td>
+                        {{ synopt.begin_date| date:"Y-m-d H:m" }}<br>
+                        {{ synopt.finish_date | date:"Y-m-d H:m" }}
+                    </td>
+                    <td>{{ synopt.created_by }}</td>
+                    <td>{{ synopt.creation_date }}</td>
+                    {% if synopt.modified_by %}
+                        <td>{{ synopt.modified_by }}</td>
+                        <td>{{ synopt.modification_date }}</td>
+                    {% else %}
+                        <td>-</td>
+                        <td>-</td>
+                    {% endif %}
+                    <td>{{ synopt.description|wordwrap:20 | linebreaksbr | truncatechars:"40" }}</td>
+                    <td><a class="btn btn-info fas fa-edit fa-lg"
+                           href="{% url 'forecaster:synoptic_situation_edit' synopt=synopt.pk %}"></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% include "forecaster/base/_paginate.html" %}
+    </div>
+{% endblock %}

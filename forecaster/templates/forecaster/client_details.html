@@ -1,0 +1,39 @@
+{% extends "forecaster/base/base.html" %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url "forecaster:dashboard" %}">Panel meteorologa</a>
+        </li>
+        <li class="breadcrumb-item active">{{ client }}</li>
+    </ol>
+    <hr>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-4 col-sm-6 mb-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="card-body-icon">
+                        <i class="fas fa-fw fa-clipboard"></i>
+                    </div>
+                    <div class="text-center display-5">Menu</div>
+                </div>
+                <a id="hover_link" class="card-footer text-white"
+                   href="{% url "forecaster:forecasts_schedule" client_pk=client.pk %}">
+                    <span class="float-left">Prognozy do wykonania</span>
+                    <span class="float-right">
+                                        <i class="fas fa-angle-right"></i>
+                                    </span>
+                </a>
+
+                <a id="hover_link" class="card-footer text-white"
+                   href="{% url "forecaster:forecasts_history" client_pk=client.pk %}">
+                    <span class="float-left">Historia prognoz</span>
+                    <span class="float-right">
+                                        <i class="fas fa-angle-right"></i>
+                                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

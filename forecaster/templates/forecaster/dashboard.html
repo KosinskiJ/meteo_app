@@ -1,0 +1,54 @@
+{% extends "forecaster/base/base.html" %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Panel meteorologa</a>
+        </li>
+        <li class="breadcrumb-item active">Strona główna</li>
+    </ol>
+    <hr>
+
+    <div class="row justify-content-md-center">
+        <div class="col-xl-4 col-sm-6 mb-5">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="card-body-icon">
+                        <i class="fas fa-fw fa-briefcase"></i>
+                    </div>
+                    <div class="text-lg-center display-4">Sytuacja synoptyczna</div>
+                </div>
+
+                <a id="hover_link" class="card-footer text-white"
+                   href="{% url 'forecaster:synoptic_situation' %}">
+                    <span class="float-left">Wykonaj</span>
+                    <span class="float-right">
+                                        <i class="fas fa-angle-right"></i>
+                                    </span>
+                </a>
+
+            </div>
+        </div>
+        <div class="col-xl-5 col-sm-6 mb-5">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="card-body-icon">
+                        <i class="fas fa-fw fa-briefcase"></i>
+                    </div>
+                    <div class="text-lg-center display-4">Klient</div>
+                </div>
+
+                {% for client in clients %}
+                    <a id="hover_link" class="card-footer text-white"
+                       href="{% url "forecaster:client_details" client_pk=client.pk %}">
+                        <span class="float-left">Klient: {{ client }}</span>
+                        <span class="float-right">
+                                        <i class="fas fa-angle-right"></i>
+                                    </span>
+                    </a>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Profesjonalne prognozy pogody {% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static "libs/bootstrap/bootstrap.min.css" %}">
+
+    {% block css_imports %}{% endblock %}
+
+</head>
+<body>
+{% block navbar %}
+        {% include "dashboard/base/base_navbar.html" %}
+{% endblock %}
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+
+{% block js_imports %}{% endblock %}
+<script src="{% static "libs/bootstrap/bootstrap.js" %}"></script>
+<script src="{% static "libs/bootstrap/bootstrap.bundle.js" %}"></script>
+<script src="{% static "libs/jquery/jquery-3.3.1.min.js" %}"></script>
+
+</html>
